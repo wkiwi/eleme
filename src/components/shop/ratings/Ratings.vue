@@ -1,12 +1,12 @@
 <template>
-    <div class="header">
-        头部
+    <div class="page">
+        评价
     </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-    name: 'HomeHeader',
+    name: 'ShopRatings',
     data () {
         return {
 
@@ -18,6 +18,6 @@ export default {
 }
 </script>
 
-<style  lang="stylus" scoped>
+<style scoped lang="stylus">
 
 </style>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Shop from '@/components/shop/Shop'
-import Goods from '@/components/shop/goods/Goods'
+import ShopGoods from '@/components/shop/components/goods/Goods'
 import Ratings from '@/components/shop/ratings/Ratings'
 import Seller from '@/components/shop/seller/Seller'
 Vue.use(Router)
@@ -15,7 +15,7 @@ export default new Router({
       children: [{
           path: '',
           name: 'ShopGoods',
-          component: Goods
+          component: ShopGoods
       },
       {
           path: '/ratings',

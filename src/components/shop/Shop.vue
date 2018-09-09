@@ -12,13 +12,14 @@
                 <div >商家</div>
             </router-link>
         </div>
-        <router-view/>
+        <router-view :seller="seller"/>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
-import ShopHeader from './components/Header'
+import ShopHeader from './components/header/Header'
+import ShopCart from './components/cart/Cart'
 export default {
   name: 'Shop',
   data () {
@@ -27,7 +28,8 @@ export default {
       }
   },
   components: {
-      ShopHeader
+      ShopHeader,
+      ShopCart
   },
   methods: {
     getInfo: function () {

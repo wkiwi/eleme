@@ -1,45 +1,50 @@
 <template>
-    <div class="shopcart">
-        <div class="content">
-            <div class="content-left">
-                <div class="logo-wrapper">
-                    <div class="logo" :class="{'heightlight':totalCount>0}">
-                        <span class="icon-shopping_cart" :class="{'heightlight':totalCount>0}"></span>
+    <div>
+        <div class="shopcart">
+            <div class="content" @click="toggleList">
+                <div class="content-left">
+                    <div class="logo-wrapper">
+                        <div class="logo" :class="{'heightlight':totalCount>0}">
+                            <span class="icon-shopping_cart" :class="{'heightlight':totalCount>0}"></span>
+                        </div>
+                        <div class="num" v-show="totalCount>0">{{totalCount}}</div>
                     </div>
-                    <div class="num" v-show="totalCount>0">{{totalCount}}</div>
+                    <div class="price bordr-right" :class="{'heightlight':totalPrice>0}">￥{{totalPrice}}</div>
+                    <div class="desc">另需配送费￥{{this.deliveryPrice}}元</div>
                 </div>
-                <div class="price bordr-right" :class="{'heightlight':totalPrice>0}">￥{{totalPrice}}</div>
-                <div class="desc">另需配送费￥{{this.deliveryPrice}}元</div>
+                <div class="content-right" @click.stop.prevent="pay">
+                    <div class="pay" :class="payClass">
+                    {{payDesc}}
+                    </div>
+                </div>
             </div>
-            <div class="content-right" >
-                <div class="pay" :class="payClass">
-                   {{payDesc}}
-                </div>
+            <div class="ball-container">
+                <transition-group name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+                    <div v-for="(ball,index) of balls" :key="index" v-show="ball.show" class="ball">
+                        <div class="inner inner-hook"></div>
+                    </div>
+                </transition-group>
             </div>
+            <transition name="fold">
+                <shopcart-list  :selectFood="selectFoods" v-show="listShow" :listShow="listShow"></shopcart-list>
+            </transition>
         </div>
-        <div class="ball-container">
-            <transition-group name="drop" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
-                <div v-for="(ball,index) of balls" :key="index" v-show="ball.show" class="ball">
-                    <div class="inner inner-hook"></div>
-                </div>
-            </transition-group>
-        </div>
+        <fade-animation>
+            <div class="list-mask" v-show="listShow" @click="hideCartList"></div>
+        </fade-animation>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+import ShopcartList from '../cartlist/CartList'
+import FadeAnimation from '@/common/fade/fadeAnimation' 
 export default {
     name: 'ShopCart',
     props: {
         'selectFoods': {
             type: Array,
             default () {
-                return [
-                    {
-                       price: 100,
-                       count: 1 
-                    }
-                ]
+                return []
             }
         },
         'delivery-price': {
@@ -51,7 +56,11 @@ export default {
             default: 0
         }
     },
-        data () {
+    components: {
+        ShopcartList,
+        FadeAnimation
+    },
+    data () {
         return {
             balls: [
                 {
@@ -85,8 +94,9 @@ export default {
                     show: false
                 }
             ],
-            dropBalls: []
-        }
+            dropBalls: [],
+            fold: true
+            }
     },
     computed: {
         totalPrice () {
@@ -119,11 +129,23 @@ export default {
             } else {
                 return 'enough'
             }
+        },
+        listShow () {
+            if (!this.totalCount) {
+                this.fold = true 
+                return false
+            }
+            let show = !this.fold   
+            return show
+        },
+        toggle () {
+            let toggle = !this.listShow   
+            return toggle
         }
     },
     methods: {
         drop (el) {
-            console.log(el)
+            /* console.log(el) */
             for (let i = 0; i < this.balls.length; i++) {
                 let ball = this.balls[i]
                 if (!ball.show) {
@@ -170,13 +192,26 @@ export default {
         },
         afterEnter (el) {
             let ball = this.dropBalls.shift()
-            console.log(ball)
             if (ball) {
                 ball.show = false
                 el.style.display = 'none'
             }
+        },
+        toggleList () {
+            if (!this.totalCount) {
+                return 
+            }
+            this.fold = !this.fold
+        },
+        hideCartList () {
+            this.fold = true
+        },
+        pay () {
+            if (this.totalPrice < this.minPrice) {
+                return 
+            }
+            alert(`请您支付${this.totalPrice}元`)
         }
-
     }
 }
 </script>
@@ -282,5 +317,14 @@ export default {
                     background: rgb(0,160,220)
                     transition: all .4s linear
                 &.drop-enter-active
-                    transition: all .4s cubic-bezier(.49, -0.29, .75, .41)
+                    transition: all .4s cubic-bezier(.49, -0.29, .75, .41)     
+    .list-mask
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: 40
+        background: rgba(7,17,27,.6)
+        filter: blur(.2rem)
 </style>

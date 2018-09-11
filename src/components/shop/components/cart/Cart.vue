@@ -130,13 +130,22 @@ export default {
                 return 'enough'
             }
         },
-        listShow () {
-            if (!this.totalCount) {
-                this.fold = true 
-                return false
+        listShow: {
+            get: function () {
+                if (!this.totalCount) {
+                    return false
+                }
+                let show = !this.fold   
+                return show
+            },
+            set: function () {
+                if (!this.totalCount) {
+                    this.fold = true 
+                    return false
+                }
+                let show = !this.fold   
+                return show
             }
-            let show = !this.fold   
-            return show
         },
         toggle () {
             let toggle = !this.listShow   

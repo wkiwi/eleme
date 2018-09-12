@@ -12,7 +12,9 @@
                 <div >商家</div>
             </router-link>
         </div>
-        <router-view :seller="seller"/>
+        <keep-alive>
+            <router-view :seller="seller"/>
+        </keep-alive>
     </div>
 </template>
 
@@ -20,11 +22,18 @@
 import axios from 'axios'
 import ShopHeader from './components/header/Header'
 import ShopCart from './components/cart/Cart'
+import {urlParse} from '@/assets/js/util'
 export default {
   name: 'Shop',
   data () {
       return {
-          seller: {}
+          seller: {
+              id: (() => {
+                  let queryParam = urlParse()
+                  console.log(queryParam)
+                  return queryParam.id
+              })()
+          }
       }
   },
   components: {
@@ -33,13 +42,14 @@ export default {
   },
   methods: {
     getInfo: function () {
-        axios.get('/api/seller.json')
+        axios.get('/api/seller.json?id=' + this.seller.id)
         .then(this.handleGitInfoSucc)  
     },
     handleGitInfoSucc: function (res) {
         const data = res.data
         console.log(data)
-        this.seller = data
+        /* this.seller = data */
+        this.seller = Object.assign({}, this.seller, data)
     }
   },
   mounted () {

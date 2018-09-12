@@ -133,7 +133,6 @@ export default {
         _calculateHeight: function () {
             const element = this.$refs['foods-wrapper']
             let foodList = element.getElementsByClassName('food-list-hook')
-            console.log(foodList)
             let height = 0
             this.listHeight.push(height)
             for (let i = 0; i < foodList.length; i++) {

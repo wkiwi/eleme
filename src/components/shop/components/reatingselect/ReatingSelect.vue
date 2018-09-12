@@ -9,27 +9,11 @@
             <span class='icon-check_circle'></span>
             <span class="text">只看有内容的评价</span>
         </div>
-        <div class="rating-wrapper">
-            <ul v-show="ratings && ratings.length">
-                <li v-show="needShow(item.rateType,item.text)" v-for="(item,index) of ratings" :key="index" class="rating-item border-bottom">
-                    <div class="user">
-                        <span class="name">{{item.username}}</span>
-                        <img :src="item.avatar" class="avatar">
-                    </div>
-                    <div class="time">{{item.rateTime | formatDate}}</div>
-                    <p class="text">
-                        <span :class="{'icon-thumb_up':item.rateType===0,'icon-thumb_down':item.rateType===1}"></span>{{item.text}}
-                    </p>
-                </li>
-            </ul>
-            <div class="no-rating" v-show="!ratings || !ratings.length">暂无评价</div>
-        </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Bus from '@/assets/js/eventBus'
-import {formatDate} from '@/assets/js/date'
 const POSITIVE = 0
 const NEGATIVT = 1 
 const ALL = 2
@@ -65,12 +49,6 @@ export default {
         return {
             selectType2: this.selectType,
             onlyContent2: this.onlyContent
-        }
-    },
-    filters: {
-        formatDate (time) {
-            let date = new Date(time)
-            return formatDate(date, 'yyyy-MM-dd hh:mm')
         }
     },
     computed: {
@@ -159,50 +137,4 @@ export default {
                 display: inline-block
                 vertical-align: top
                 font-size: .24rem
-        .rating-wrapper
-            padding: 0 .36rem
-            .rating-item
-                positive: relative 
-                padding: .32rem 0
-                &:last-child
-                    &::before
-                        border:none
-                .user
-                    position: absolute 
-                    right: 0
-                    top: .32rem
-                    font-size: 0
-                    .name
-                        display: inline-block
-                        vertical-align: top
-                        line-height: .48rem
-                        font-size: .2rem
-                        margin-right: .12rem
-                        color: rgb(147,153,159)
-                    .avatar
-                        width: .48rem
-                        height: .48rem
-                        border-radius: 50%
-                .time
-                    margin-bottom: .12rem
-                    line-height: .24rem
-                    font-size: .2rem
-                    color: rgb(147,153,159)
-                .text
-                    line-height: .32rem
-                    font-size: .24rem
-                    color: rgb(7,17,27)
-                    .icon-thumb_up,.icon-thumb_down
-                        margin-right: .08rem
-                        line-height .32rem
-                        font-size: .24rem
-                    .icon-thumb_up
-                        color: rgb(0,160,220)  
-                    .icon-thumb_down
-                        color: rgb(147,153,159)
-            .no-rating
-                padding: .32rem 0
-                font-size: .24rem
-                color: rgb(147,153,159)
-                text-align: center
 </style>

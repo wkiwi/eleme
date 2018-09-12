@@ -2,7 +2,7 @@
     <div class="app">
         <shop-header :seller="seller"></shop-header>
         <div class="tab border-bottom">
-            <router-link to="/" tag="div" class="tab-item active">
+            <router-link to="/" tag="div" class="tab-item ">
                 <div >商品</div>
             </router-link>
             <router-link to="/ratings" tag="div" class="tab-item">
